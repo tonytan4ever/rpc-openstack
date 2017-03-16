@@ -38,15 +38,6 @@ fi
 # Check the openstack-ansible submodule status
 check_submodule_status
 
-#################################################
-#
-# Begin: Temporary Hacks for artifacted deployment
-#
-
-# Ensure that we're using git checkouts instead of
-# the ansible-galaxy download.
-export ANSIBLE_ROLE_FETCH_MODE="git-clone"
-
 # Bootstrap Ansible
 source "$(dirname "${0}")/bootstrap-ansible.sh"
 
