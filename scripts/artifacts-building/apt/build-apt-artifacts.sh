@@ -95,7 +95,6 @@ echo "repo ansible_host=${REPO_HOST} ansible_user=${REPO_USER} ansible_ssh_priva
 cd ${BASE_DIR}/scripts/artifacts-building/apt
 ansible-playbook aptly-pre-install.yml ${ANSIBLE_PARAMETERS}
 ansible-playbook aptly-all.yml -i /opt/inventory ${ANSIBLE_PARAMETERS}
-openstack-ansible apt-artifacts-testing.yml ${ANSIBLE_PARAMETERS}
 
-# List the contents
-ls -R ${RPC_ARTIFACTS_FOLDER}
+source /opt/rpc-openstack/openstack-ansible/scripts/openstack-ansible.rc
+ansible-playbook apt-artifacts-testing.yml ${ANSIBLE_PARAMETERS}
