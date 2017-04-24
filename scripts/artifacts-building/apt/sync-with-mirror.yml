@@ -16,7 +16,6 @@
 - name: Sync apt artifacts with mirror
   hosts: mirrors
   vars_files:
-    - artifacting-vars.yml
     - aptly-vars.yml
   tasks:
     - name: Ensure the folders are present on the repo before we try to sync them
@@ -58,7 +57,6 @@
   hosts: localhost
   connection: local
   vars_files:
-    - artifacting-vars.yml
     - aptly-vars.yml
   tasks:
     - name: Make sure pulled data has the proper permissions
@@ -77,7 +75,6 @@
 - name: Ensure mirror has the permissions to serve aptly public folders
   hosts: mirrors
   vars_files:
-    - artifacting-vars.yml
     - aptly-vars.yml
   tasks:
     - name: Make sure pushed data has the proper permissions
@@ -96,7 +93,6 @@
 - name: Public serve the gpg used for signing
   hosts: mirrors
   vars_files:
-    - artifacting-vars.yml
     - aptly-vars.yml
   tasks:
     - name: Sync apt public key with mirror

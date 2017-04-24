@@ -18,7 +18,6 @@
   connection: local
   gather_facts: no
   vars_files:
-    - artifacting-vars.yml
     - aptly-vars.yml
   become_user: aptly
   become: True
@@ -26,7 +25,7 @@
   tasks:
     - assert:
         that:
-          - artifacts_version is defined
+          - rpc_release is defined
           - distribution_release is defined
         msg: You need to define what you are releasing!
     - name: list all the repos/mirrors for this distribution that arent in exclude list
@@ -51,7 +50,7 @@
       with_items: "{{ aptly_existing_published_snapshots_list.stdout_lines }}"
       when:
         - "{{ lookup('ENV','RECREATE_SNAPSHOTS') | bool }}"
-        - "item.find('{{ artifacts_version }}') != -1"
+        - "item.find('{{ rpc_release }}') != -1"
         - "item.find('{{ distribution_release }}') != -1"
       failed_when: false
     - name: Delete old merged snapshots for this distro/artifacts version
@@ -59,32 +58,32 @@
       with_items: "{{ aptly_existing_snapshots_list.stdout_lines }}"
       when:
         - "{{ lookup('ENV','RECREATE_SNAPSHOTS') | bool }}"
-        - "item.find('miko-{{ artifacts_version }}-{{ distribution_release }}') != -1"
+        - "item.find('miko-{{ rpc_release }}-{{ distribution_release }}') != -1"
       failed_when: false
     - name: Delete old snapshots for this distro/artifacts version
       shell: "aptly snapshot drop {{ item }}"
       with_items: "{{ aptly_existing_snapshots_list.stdout_lines }}"
       when:
         - "{{ lookup('ENV','RECREATE_SNAPSHOTS') | bool }}"
-        - "item.find('slushie-{{ artifacts_version }}') != -1"
+        - "item.find('slushie-{{ rpc_release }}') != -1"
         - "item.find('{{ distribution_release }}') != -1 or item.find('ALL') != -1"
       failed_when: false
     - name: Froze the mirrors/repos by snapshot creation
-      shell: "aptly snapshot create slushie-{{ artifacts_version }}-{{ item.1 }} from {{ item.0.item }} {{ item.1 }}"
+      shell: "aptly snapshot create slushie-{{ rpc_release }}-{{ item.1 }} from {{ item.0.item }} {{ item.1 }}"
       register: aptly_snapshot_create
       with_subelements:
         - "{{ aptly_repo_list.results }}"
         - "stdout_lines"
       failed_when: aptly_snapshot_create.rc != 0 and aptly_snapshot_create.stderr.find('already exists') == -1
       changed_when: aptly_snapshot_create.stderr.find('already exists') == -1
-    - shell: "aptly snapshot list -raw | grep slushie-{{ artifacts_version }}"
+    - shell: "aptly snapshot list -raw | grep slushie-{{ rpc_release }}"
       register: aptly_snapshot_list
       changed_when: false
     - name: Output the full list of tuples distribution/artifact version
       debug:
         msg: "Full list of snapshots for this distribution/artifact version: {{ aptly_snapshot_list.stdout_lines }}"
     - name: Merge the snapshots together
-      shell: "aptly snapshot merge {{ aptly_snapshot_merge_flags }} miko-{{ artifacts_version }}-{{ distribution_release }} {{ aptly_miko_mapping.get(distribution_release) | join(' ') }}"
+      shell: "aptly snapshot merge {{ aptly_snapshot_merge_flags }} miko-{{ rpc_release }}-{{ distribution_release }} {{ aptly_miko_mapping.get(distribution_release) | join(' ') }}"
       register: aptly_snapshot_merge_create
       failed_when:
         - aptly_snapshot_merge_create.rc != 0

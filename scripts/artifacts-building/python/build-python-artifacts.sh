@@ -47,7 +47,7 @@ export ARCH=${ARCH:-x86_64}
 
 ## Main ----------------------------------------------------------------------
 
-# The derive-artifact-version.py script expects the git clone to
+# The derive-artifact-version.sh script expects the git clone to
 # be at /opt/rpc-openstack, so we link the current folder there.
 ln -sfn ${PWD} /opt/rpc-openstack
 
@@ -57,7 +57,7 @@ cd /opt/rpc-openstack
 ./scripts/bootstrap-aio.sh
 
 # Figure out the release version
-export RPC_RELEASE="$(/opt/rpc-openstack/scripts/artifacts-building/derive-artifact-version.py)"
+export RPC_RELEASE="$(/opt/rpc-openstack/scripts/artifacts-building/derive-artifact-version.sh)"
 
 # Remove the env.d configurations that set the build to use
 # container artifacts. We don't want this because container

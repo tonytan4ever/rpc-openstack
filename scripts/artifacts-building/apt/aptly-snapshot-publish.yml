@@ -18,7 +18,6 @@
   connection: local
   gather_facts: no
   vars_files:
-    - artifacting-vars.yml
     - aptly-vars.yml
   become_user: aptly
   become: True
@@ -26,11 +25,11 @@
   tasks:
     - assert:
         that:
-          - artifacts_version is defined
+          - rpc_release is defined
           - distribution_release is defined
         msg: You need to define what you are releasing!
     - name: Publish snapshot into public/integrated/ folder
-      shell: 'aptly publish snapshot -distribution="{{ artifacts_version }}-{{ distribution_release }}" miko-{{ artifacts_version }}-{{ distribution_release }} integrated'
+      shell: 'aptly publish snapshot -distribution="{{ rpc_release }}-{{ distribution_release }}" miko-{{ rpc_release }}-{{ distribution_release }} integrated'
       register: aptly_snapshot_publish
       #This can run for maximum 23h.
       async: 82800
@@ -54,7 +53,7 @@
       tags:
         - aptly_publish
     - name: Publish snapshot into public folder (no merge)
-      shell: 'aptly publish snapshot -distribution="{{ artifacts_version }}-{{ distribution_release }}" {{ item.src }} independant/{{ item.dest }}'
+      shell: 'aptly publish snapshot -distribution="{{ rpc_release }}-{{ distribution_release }}" {{ item.src }} independant/{{ item.dest }}'
       with_items: "{{ aptly_n_mapping.get(distribution_release) }}"
       register: aptly_snapshot_nomerge_publish
       failed_when:

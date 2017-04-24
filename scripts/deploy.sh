@@ -76,7 +76,7 @@ if [[ "${DEPLOY_AIO}" == "yes" ]]; then
   # Remove this once we have published artifacts
   # for a real tagged version.
   # Set the rpc_release to the next guessed version.
-  echo "rpc_release: $(/opt/rpc-openstack/scripts/artifacts-building/derive-artifact-version.py)" >> /etc/openstack_deploy/user_rpco_variables_overrides.yml
+  echo "rpc_release: $(/opt/rpc-openstack/scripts/artifacts-building/derive-artifact-version.sh)" >> /etc/openstack_deploy/user_rpco_variables_overrides.yml
 
 fi
 

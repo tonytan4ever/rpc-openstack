@@ -23,7 +23,6 @@
   hosts: localhost
   connection: local
   vars_files:
-    - artifacting-vars.yml
     - aptly-vars.yml
   tasks:
     - name: Ensure folder exists

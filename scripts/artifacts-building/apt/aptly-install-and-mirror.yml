@@ -23,7 +23,6 @@
   hosts: localhost
   connection: local
   vars_files:
-    - artifacting-vars.yml
     - aptly-vars.yml
   vars:
     rabbitmq_package_url: "{{ _rabbitmq_package_url }}"
@@ -35,7 +34,7 @@
     - include_vars: "{{ ansible_roles_folder }}/rabbitmq_server/vars/debian.yml"
       failed_when: false
     - name: Verify if rabbitmq is already there, in case of re-run for the same artifact version
-      command: su - aptly -c "aptly repo search rabbitmq-downloaded-packages-{{ artifacts_version }}-ALL 'Name (rabbitmq-server), Version ({{ _rabbitmq_package_version }})'"
+      command: su - aptly -c "aptly repo search rabbitmq-downloaded-packages-{{ rpc_release }}-ALL 'Name (rabbitmq-server), Version ({{ _rabbitmq_package_version }})'"
       register: rabbitmq_search
       failed_when: false
       changed_when: false
@@ -54,7 +53,7 @@
       retries: 5
       delay: 5
     - name: Upload Package
-      command: su - aptly -c "aptly repo add rabbitmq-downloaded-packages-{{ artifacts_version }}-ALL /tmp/{{ _rabbitmq_package_url | basename }}"
+      command: su - aptly -c "aptly repo add rabbitmq-downloaded-packages-{{ rpc_release }}-ALL /tmp/{{ _rabbitmq_package_url | basename }}"
       register: aptly_repo_add_output
       when:
         - aptly_mirror_do_updates | bool
