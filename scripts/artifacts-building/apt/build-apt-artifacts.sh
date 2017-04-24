@@ -61,9 +61,12 @@ elif [ -z ${GPG_PRIVATE+x} ] || [ -z ${GPG_PUBLIC+x} ]; then
   exit 1
 fi
 
-# The derive-artifact-version.py script expects the git clone to
+# The derive-artifact-version.sh script expects the git clone to
 # be at /opt/rpc-openstack, so we link the current folder there.
 ln -sfn ${PWD} /opt/rpc-openstack
+
+# Figure out the release version
+export RPC_RELEASE="$(/opt/rpc-openstack/scripts/artifacts-building/derive-artifact-version.sh)"
 
 # Install Ansible
 ./scripts/bootstrap-ansible.sh

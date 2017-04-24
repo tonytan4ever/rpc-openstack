@@ -1,5 +1,6 @@
----
-# Copyright 2014-2017, Rackspace US, Inc.
+#!/bin/bash
+#
+# Copyright 2017, Rackspace US, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,15 +13,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
+# (c) 2017, Jean-Philippe Evrard <jean-philippe.evrard@rackspace.co.uk>
 
-# Artifacts folders
-artifacts_root_folder: "{{ lookup('env','RPC_ARTIFACTS_FOLDER') | default('/var/www/artifacts') }}"
-artifacts_aptrepos_dest_folder: "{{ artifacts_root_folder }}/apt"
-artifact_extradownloads_dest_folder: "{{ artifacts_root_folder }}/downloads"
-ansible_roles_folder: "/etc/ansible/roles"
-
-# Generic details
-artifacts_version: "r14.0.0rc1"
-
-# rpc-repo mirror details
-webservice_owner: "nginx"
+# Be the single source of truth for finding the artifact version with the static file modification.
+awk '/rpc_release/ { print $2; }' /opt/rpc-openstack/rpcd/etc/openstack_deploy/user_rpco_variables_defaults.yml | sed s'/"//'g

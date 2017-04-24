@@ -52,7 +52,7 @@ function patch_all_roles {
 # Ensure no remnants (not necessary if ephemeral host, but useful for dev purposes
 rm -f /opt/list
 
-# The derive-artifact-version.py script expects the git clone to
+# The derive-artifact-version.sh script expects the git clone to
 # be at /opt/rpc-openstack, so we link the current folder there.
 ln -sfn ${PWD} /opt/rpc-openstack
 
@@ -62,7 +62,7 @@ cd /opt/rpc-openstack
 ./scripts/bootstrap-aio.sh
 
 # Figure out the release version
-export RPC_RELEASE="$(/opt/rpc-openstack/scripts/artifacts-building/derive-artifact-version.py)"
+export RPC_RELEASE="$(/opt/rpc-openstack/scripts/artifacts-building/derive-artifact-version.sh)"
 
 # Force replace -> PUSH
 if [[ "$(echo ${REPLACE_ARTIFACTS} | tr [a-z] [A-Z])" == "YES" ]]; then

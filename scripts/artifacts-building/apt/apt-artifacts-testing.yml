@@ -3,7 +3,7 @@
   connection: local
   gather_facts: no
   vars_files:
-    - artifacting-vars.yml
+    - aptly-vars.yml
   vars:
     package_files_path: /tmp/Packages-files
   tasks:

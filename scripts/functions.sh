@@ -102,7 +102,7 @@ function apt_sources_use_rpc_apt_artifacts {
   fi
 
   # Derive the rpc_release version from the branch name
-  RPCO_VERSION=${RPCO_VERSION:-$(/opt/rpc-openstack/scripts/artifacts-building/derive-artifact-version.py)}
+  RPCO_VERSION=${RPCO_VERSION:-$(/opt/rpc-openstack/scripts/artifacts-building/derive-artifact-version.sh)}
 
   # Add the RPC-O apt repo source
   source /etc/lsb-release

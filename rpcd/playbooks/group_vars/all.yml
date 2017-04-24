@@ -15,11 +15,6 @@
 # This is the location where the rpc repository was checked out
 rpc_repo_path: /opt/rpc-openstack/openstack-ansible
 
-# rpc-openstack version
-# Note that this is also set in the user_*.yml files so that the
-# openstack_release override in osa_defaults is able to use it.
-rpc_release: "r14.0.0rc1"
-
 # Definitions for the repo server, these should match your openstack-ansible
 # deployment
 repo_server_port: 8181
