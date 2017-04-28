@@ -28,28 +28,22 @@
           - rpc_release is defined
           - distribution_release is defined
         msg: You need to define what you are releasing!
+    - name: Ensuring the snapshot doesn't already exists
+      shell: 'aptly publish list -raw | grep "integrated {{ rpc_release }}-{{ distribution_release }}"'
+      register: aptly_already_published
+      failed_when: false
+      changed_when: false
+      tags:
+        - aptly_publish
     - name: Publish snapshot into public/integrated/ folder
       shell: 'aptly publish snapshot -distribution="{{ rpc_release }}-{{ distribution_release }}" miko-{{ rpc_release }}-{{ distribution_release }} integrated'
       register: aptly_snapshot_publish
-      #This can run for maximum 23h.
-      async: 82800
-      poll: 0
-      tags:
-        - aptly_publish
-    # let ansible a few seconds (Nyquist rate) to build the dict for the async job.
-    - command: sleep 10
-    # To avoid CI build timeouts, we want to make sure ansible outputs to
-    # the console regularily. We do this using an async_status task.
-    - name: Poll async status
-      async_status:
-        jid: "{{ aptly_snapshot_publish.ansible_job_id }}"
-      register: job_merged_snapshot_publish_result
-      until: job_merged_snapshot_publish_result.finished
+      # This condition should always be true when recreating snapshots, false when reusing.
+      when: aptly_already_published.rc == 1
       failed_when:
-        - job_merged_snapshot_publish_result.rc != 0
-        - job_merged_snapshot_publish_result.stderr.find('already used') == -1
-      changed_when: job_merged_snapshot_publish_result.stderr.find('already used') == -1
-      retries: 16560
+        - aptly_snapshot_publish.rc != 0
+        - aptly_snapshot_publish.stderr.find('already used') == -1
+      changed_when: aptly_snapshot_publish.stderr.find('already used') == -1
       tags:
         - aptly_publish
     - name: Publish snapshot into public folder (no merge)
