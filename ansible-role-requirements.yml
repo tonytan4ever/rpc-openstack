@@ -25,3 +25,10 @@
   scm: git
   src: https://github.com/openstack/openstack-ansible-os_horizon
   version: 08e3924b6e825d1ddbc5b4536abde175734efbfc
+# Override the current lxc_hosts role until
+# https://github.com/openstack/openstack-ansible-lxc_hosts/commit/df227381ff3d318fcb8d7ab925f1ee66ed161ec8
+# gets taken into a SHA bump in OSA and RPC.
+- name: lxc_hosts
+  scm: git
+  src: https://github.com/openstack/openstack-ansible-lxc_hosts
+  version: df227381ff3d318fcb8d7ab925f1ee66ed161ec8
