@@ -75,9 +75,13 @@ aptly_n_mapping:
   trusty:
     - src: "slushie-{{ rpc_release }}-hwraid-trusty"
       dest: "hwraid-trusty"
+    - src: "slushie-{{ rpc_release }}-rax-maas-trusty"
+      dest: "rax-maas-trusty"
   xenial:
     - src: "slushie-{{ rpc_release }}-hwraid-xenial"
       dest: "hwraid-xenial"
+    - src: "slushie-{{ rpc_release }}-rax-maas-xenial"
+      dest: "rax-maas-xenial"
 
 # list of snapshots to skip
 aptly_dont_snapshot_list: []
@@ -364,12 +368,38 @@ aptly_mirrors:
     update_flags:
       - "-keyring='trustedkeys.gpg'"
     do_update: "{{ aptly_mirror_do_updates }}"
+  - name: rax-maas-trusty
+    archive_url: http://stable.packages.cloudmonitoring.rackspace.com/ubuntu-14.04-x86_64/
+    distribution: cloudmonitoring
+    component1:
+      - main
+    state: "present"
+    gpg:
+      key: "D05AB914"
+      server: "hkp://keyserver.ubuntu.com:80"
+      keyring: "trustedkeys.gpg"
+    create_flags:
+      - "-keyring='trustedkeys.gpg'"
+    update_flags:
+      - "-keyring='trustedkeys.gpg'"
+    do_update: "{{ aptly_mirror_do_updates }}"
+  - name: rax-maas-xenial
+    archive_url: http://stable.packages.cloudmonitoring.rackspace.com/ubuntu-16.04-x86_64/
+    distribution: cloudmonitoring
+    component1:
+      - main
+    state: "present"
+    gpg:
+      key: "D05AB914"
+      server: "hkp://keyserver.ubuntu.com:80"
+      keyring: "trustedkeys.gpg"
+    create_flags:
+      - "-keyring='trustedkeys.gpg'"
+    update_flags:
+      - "-keyring='trustedkeys.gpg'"
+    do_update: "{{ aptly_mirror_do_updates }}"
+
 ## TODO
-#raxmon_repo_url: "http://stable.packages.cloudmonitoring.rackspace.com/ubuntu-14.04-x86_64"
-#maas_apt_keys:
-#  - { url: "https://monitoring.api.rackspacecloud.com/pki/agent/linux.asc", state: "present" }
-#maas_apt_repos:
-#  - { repo: "deb {{ raxmon_repo_url }} cloudmonitoring main", state: "present" }
 # # POWERVM ONLY
 # - name: novalink-powervm
 #   archive_url: http://public.dhe.ibm.com/systems/virtualization/Novalink/debian
