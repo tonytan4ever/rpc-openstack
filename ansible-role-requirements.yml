@@ -18,6 +18,10 @@
   scm: git
   src: https://github.com/openstack/openstack-ansible-os_octavia.git
   version: master
+- name: rpc_maas
+  scm: git
+  src: https://github.com/rcbops/rpc-maas
+  version: 57973ea590c65346f670afdd3f03f1482ee133b3
 # Override the current horizon role until
 # https://github.com/openstack/openstack-ansible-os_horizon/commit/08e3924b6e825d1ddbc5b4536abde175734efbfc
 # gets taken into a SHA bump in OSA and RPC.
