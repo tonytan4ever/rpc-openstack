@@ -33,7 +33,7 @@
         delete: "{{ item.delete | default(omit) }}"
         recursive: "{{ item.recursive | default(omit) }}"
         owner: "{{ item.owner | default(omit) }}"
-        rsync_opts: "--quiet"
+        rsync_opts: "{{ item.rsync_opts | default(omit) }}"
       #delegate_to: aptly_cache[0]
       register: synchronize
       until: synchronize|success
@@ -48,47 +48,12 @@
           dest: "{{ artifacts_aptrepos_dest_folder | dirname }}"
           delete: "yes"
           recursive: "yes"
+          rsync_opts: "--quiet --chown={{ aptly_user }}:www-data"
         - action: "push-aptly"
           mode: "push"
           src: "{{ aptly_user_home }}"
           dest: "{{ artifacts_aptrepos_dest_folder | dirname }}"
-
-- name: Ensure localhost has the permissions to manipulate aptly cache
-  hosts: localhost
-  connection: local
-  vars_files:
-    - aptly-vars.yml
-  tasks:
-    - name: Make sure pulled data has the proper permissions
-      file:
-        path: "{{ item.path }}"
-        state: "{{ item.state }}"
-        recurse: "{{ item.recurse | default(omit) }}"
-        owner: "{{ item.owner | default(omit) }}"
-      when: action=="pull-aptly"
-      with_items:
-        - path: "{{ aptly_user_home }}"
-          state: "directory"
-          recurse: "yes"
-          owner: "{{ aptly_user }}"
-
-- name: Ensure mirror has the permissions to serve aptly public folders
-  hosts: mirrors
-  vars_files:
-    - aptly-vars.yml
-  tasks:
-    - name: Make sure pushed data has the proper permissions
-      file:
-        path: "{{ item.path }}"
-        state: "{{ item.state }}"
-        recurse: "{{ item.recurse | default(omit) }}"
-        owner: "{{ item.owner | default(omit) }}"
-      when: action=="push-aptly"
-      with_items:
-        - path: "{{ aptly_user_home }}"
-          state: "directory"
-          recurse: "yes"
-          owner: "{{ webservice_owner }}"
+          rsync_opts: "--quiet --chown={{ webservice_owner }}:www-data"
 
 - name: Public serve the gpg used for signing
   hosts: mirrors
