@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    The elasticsearch role now respects upper constraints when installing
+    pip packages. The upper constriants file is defined in
+    ``rpcd/playbooks/group_vars/all.yml``.

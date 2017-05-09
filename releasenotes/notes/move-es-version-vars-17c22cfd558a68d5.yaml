@@ -1,0 +1,6 @@
+---
+fixes:
+  - |
+    The ``elasticsearch_version`` and ``elasticsearch_reindex_version``
+    variables have been moved to ``user_rpco_variables_defaults.yml``
+    so that all OSA roles can have access to the variables.

@@ -1,0 +1,7 @@
+---
+fixes:
+  - |
+    The ``elasticsearch>=2.0.0,<3.0.0`` constraint has been removed from the
+    ElasticSearch role, and is now controlled via OpenStack upper-constraints
+    placed here:
+    https://github.com/openstack/requirements/blob/stable/ocata/upper-constraints.txt#L129

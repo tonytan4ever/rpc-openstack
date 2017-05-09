@@ -1,0 +1,6 @@
+---
+fixes:
+  - |
+    The ``bootstrap_user_variables_template`` variable is now overridden
+    in the ``scripts/bootstrap-aio.yml`` playbook so that the
+    ``user_variables.aio.yml.j2`` is always used for RPCO AIO deployments.

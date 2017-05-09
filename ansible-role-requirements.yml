@@ -13,7 +13,7 @@
 - name: rcbops_openstack-ops
   scm: git
   src: https://github.com/rsoprivatecloud/openstack-ops
-  version: 65c939142991a244c1aba1a530d5cc122b7adb24
+  version: 7b1c9bc8b6e43347057753d0970f31975f73d89e # Tip of stable/ocata as of 05/09/2017
 - name: os_octavia
   scm: git
   src: https://github.com/openstack/openstack-ansible-os_octavia.git
@@ -21,4 +21,4 @@
 - name: rpc_maas
   scm: git
   src: https://github.com/rcbops/rpc-maas
-  version: 1701d34fcb106cec11ba00284ac462e78bef14e0
+  version: 73f865af6e541a90c0baea309f327d1a678ed3ad

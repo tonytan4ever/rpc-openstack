@@ -21,6 +21,7 @@ rpc_release: "{{ lookup('pipe', 'cd /opt/rpc-openstack && git describe --tags --
 # deployment
 repo_server_port: 8181
 openstack_repo_url: "http://{{ internal_lb_vip_address }}:{{ repo_server_port }}"
+repo_release_path: "{{ openstack_repo_url }}/os-releases/{{ openstack_release }}/{{ os_distro_version }}"
 
 # Location to store a catalog of migrations completed
 migrations_dir: /etc/openstack_deploy/migrations
@@ -32,3 +33,6 @@ conf_directory_mode: 755
 holland_venv_enabled: True
 holland_venv_bin: "/openstack/venvs/holland-{{ rpc_release }}/bin"
 holland_venv: "/openstack/venvs/holland-{{ rpc_release }}"
+
+# The upper constraints to apply to all pip installations
+pip_install_upper_constraints: "{{ repo_release_path }}/requirements_absolute_requirements.txt"

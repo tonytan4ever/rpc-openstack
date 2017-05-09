@@ -1,0 +1,11 @@
+---
+deprecations:
+  - |
+    The ``scenario`` override variable in ``scripts/bootstrap-aio.yml`` has
+    been renamed to match the it's renamed equivalent
+    ``bootstrap_host_scenario``. The ``scenario`` variable is no longer used.
+fixes:
+  - |
+    The ``scenario`` override variable in ``scripts/bootstrap-aio.yml`` has
+    been renamed to match the it's renamed equivalent in the upstream
+    bootstrap role: ``bootstrap_host_scenario``.
