@@ -32,21 +32,23 @@
         dest: "{{ repo_remote_path }}/meta/1.0/index-system"
         owner: "{{ webserver_owner }}"
         group: "{{ webserver_group }}"
-    - name: Ensure lxc-images folder exists
+    - name: Ensure destination folders exist
       file:
-        path: "{{ repo_remote_path }}/{{ webserver_container_artifacts_uri }}/"
+        path: "{{ repo_remote_path }}{{ item.split(';')[5] }}"
         state: directory
         owner: "{{ webserver_owner }}"
         group: "{{ webserver_group }}"
+      with_lines: "cat /opt/list"
     - name: Publish container artifact
       synchronize:
-        src: "{{ lxc_image_folder }}/"
-        dest: "{{ repo_remote_path }}/{{ webserver_container_artifacts_uri }}"
+        src: "{{ lxc_image_folder }}{{ item.split(';')[5] | dirname }}/"
+        dest: "{{ repo_remote_path }}{{ item.split(';')[5] | dirname }}"
         mode: push
-        delete: no
+        delete: yes
         recursive: yes
         rsync_opts:
           - "--chown=nginx:www-data"
+      with_lines: "cat /opt/list"
       register: synchronize
       until: synchronize | success
       retries: 5
