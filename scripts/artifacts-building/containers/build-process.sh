@@ -21,7 +21,7 @@ set -e -u -x
 
 # To provide flexibility in the jobs, we have the ability to set any
 # parameters that will be supplied on the ansible-playbook CLI.
-export ANSIBLE_PARAMETERS=${ANSIBLE_PARAMETERS:--v}
+export ANSIBLE_PARAMETERS=${ANSIBLE_PARAMETERS:--vvv}
 
 # Set this to YES if you want to replace any existing artifacts for the current
 # release with those built in this job.
@@ -121,11 +121,10 @@ openstack-ansible containers/artifact-build-chroot.yml \
                   ${ANSIBLE_PARAMETERS}
 
 # Build the list of roles to build containers for
-role_list=""
-role_list="${role_list} elasticsearch kibana logstash memcached_server"
-role_list="${role_list} os_cinder os_glance os_heat os_horizon os_ironic"
-role_list="${role_list} os_keystone os_neutron os_nova os_swift os_tempest"
-role_list="${role_list} rabbitmq_server repo_server rsyslog_server"
+# TODO(odyssey4me):
+# This has been changed for debugging purposes. Revert this once the
+# debugging is complete.
+role_list="os_keystone"
 
 # Build all the containers
 for cnt in ${role_list}; do
