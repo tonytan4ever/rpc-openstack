@@ -26,29 +26,43 @@
         state: directory
         owner: "{{ webserver_owner }}"
         group: "{{ webserver_group }}"
+
     - name: Publish metadata
       copy:
         src: "/opt/list"
         dest: "{{ repo_remote_path }}/meta/1.0/index-system"
         owner: "{{ webserver_owner }}"
         group: "{{ webserver_group }}"
+
     - name: Ensure destination folders exist
       file:
         path: "{{ repo_remote_path }}{{ item.split(';')[5] }}"
         state: directory
         owner: "{{ webserver_owner }}"
         group: "{{ webserver_group }}"
-      with_lines: "cat /opt/list"
-    - name: Publish container artifact
+      # With the below sample line in the metadata file, we need to ensure
+      # that we only get lines that are for this release. We do this by
+      # grepping for the 4th element in the ';'-delimited list.
+      # ubuntu;trusty;amd64;cinder-r14.1.0rc1;20170511;/lxc-images/ubuntu/trusty/amd64/cinder-r14.1.0rc1/20170511
+      with_lines: "grep '-{{ rpc_release }};' /opt/list"
+
+    # To ensure that the push/delete removes any previous builds
+    # for the same variant, we choose to push the built artifact's
+    # parent folder to rpc-repo.
+    # eg:
+    # artifact directory: lxc-images/ubuntu/trusty/amd64/cinder-r14.1.0rc1/20170509/
+    # rsync src: lxc-images/ubuntu/trusty/amd64/cinder-r14.1.0rc1
+    # rsync dest: lxc-images/ubuntu/trusty/amd64/
+    - name: Publish container artifacts
       synchronize:
-        src: "{{ lxc_image_folder }}{{ item.split(';')[5] | dirname }}/"
-        dest: "{{ repo_remote_path }}{{ item.split(';')[5] | dirname }}"
+        src: "{{ lxc_image_folder }}{{ item.split(';')[5] | dirname }}"
+        dest: "{{ repo_remote_path }}{{ (item.split(';')[5] | dirname) | dirname }}/"
         mode: push
         delete: yes
         recursive: yes
         rsync_opts:
           - "--chown=nginx:www-data"
-      with_lines: "cat /opt/list"
+      with_lines: "grep '-{{ rpc_release }};' /opt/list"
       register: synchronize
       until: synchronize | success
       retries: 5
